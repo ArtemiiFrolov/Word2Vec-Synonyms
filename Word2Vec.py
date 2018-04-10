@@ -38,6 +38,7 @@ for i, term in enumerate(new_model.wv.vocab):
     if i > 30:
         break
 #print(words)
+
 words = ['beans', 'broccoli', 'carrot', 'celery', 'corn', 'cucumber', 'asparagus', 'eggplant', 'lettuce', 'cabbage', 'onion', 'peas', 'potato', 'pumpkin', 'radish', 'spinach', 'tomato', 'turnip',
          'alligator', 'ant', 'bear', 'bee', 'bird', 'camel', 'cat', 'cheetah', 'chicken', 'chimpanzee', 'cow',
          'crocodile', 'deer', 'dog', 'dolphin', 'duck', 'eagle', 'elephant', 'fish', 'fly', 'fox', 'frog', 'giraffe',
@@ -45,17 +46,21 @@ words = ['beans', 'broccoli', 'carrot', 'celery', 'corn', 'cucumber', 'asparagus
          'accountant', 'actor', 'actress', 'athlete', 'author', 'baker', 'banker', 'barber', 'beautician', 'broker',
          'burglar', 'butcher', 'carpenter', 'chauffeur', 'chef', 'clerk', 'coach', 'craftsman', 'criminal', 'crook',
          'dentist', 'doctor', 'editor', 'engineer', 'farmer']
+
+
 #words = ['salami', 'meat', 'pork', 'candy', 'dessert', 'chocolate', 'rice', 'curry', 'chicken', 'wheat', 'potato']
 X = np.zeros((len(words),len(words)))
+print(new_model.similarity('vegetable', words[0]), new_model.similarity('animal', words[0]), new_model.similarity('profession', words[0]))
 for i, iV, in enumerate(words):
     for j, jV in enumerate(words):
         try:
             X[i, j] = new_model.similarity(iV, jV)
         except  KeyError:
             X[i,j] = 2
-
+            #print(jV, "!")
+#print(X)
 optimalK = OptimalK(parallel_backend='None')
-n_clusters = optimalK(X, cluster_array=np.arange(1, 11))
+n_clusters = optimalK(X, cluster_array=np.arange(1, 20))
 print('Optimal clusters: ', n_clusters)
 
 
@@ -68,7 +73,7 @@ plt.ylabel('Gap Value')
 plt.title('Gap Values by Cluster Count')
 plt.show()
 
-kmeans = cluster.KMeans(n_clusters=3)
+kmeans = cluster.KMeans(n_clusters=4)
 kmeans.fit(X)
 
 labels = kmeans.labels_
@@ -79,6 +84,8 @@ for i, label in enumerate(kmeans.labels_):
     else:
         dictX[label] = [words[i]]
 print(dictX)
+
+
 
 print("Cluster id labels for inputted data")
 print(labels)
